@@ -7,6 +7,23 @@ The system is built for advertising agencies and businesses that want to move aw
 
 Main technologies used: PHP, Laravel, JavaScript, and MySQL.
 
+## 📸 Screenshots
+
+There are some screenshots of an actual agency using my web application.
+[Checkmate-ads.com](https://checkmate-ads.com/)
+
+### Dashboard Overview
+![Dashboard](screenshots/dashboard management.jpg)
+
+### Client Homepage
+![Clients](screenshots/wellcome page.jpg)
+
+### Ad Account Tracking
+![Accounts](screenshots/account.jpg)
+
+### Ad Customer Tracking
+![Accounts](screenshots/customer.jpg)
+
 ## 📋 Requirements
 
 Make sure your system has:
