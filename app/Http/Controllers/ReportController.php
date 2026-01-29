@@ -1,0 +1,88 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\Report\CreateRequest;
+use App\Http\Requests\Report\ExportRequest;
+use App\Models\Account;
+use App\Models\Currency;
+use App\Models\CustomerReport;
+use App\Repositories\Account\AccountRepository;
+use App\Repositories\Customer\CustomerRepository;
+use App\Repositories\Report\ReportRepositoryInterface;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ReportsImport;
+use AshAllenDesign\LaravelExchangeRates\Classes\ExchangeRate;
+
+class ReportController extends Controller
+{
+    protected $reportRepo;
+    protected $accountRepo;
+
+    public function __construct(ReportRepositoryInterface $reportRepo, AccountRepository $accountRepo, CustomerRepository $customerRepo)
+    {
+        $this->reportRepo = $reportRepo;
+        $this->accountRepo = $accountRepo;
+    }
+
+    public function index()
+    {
+        $reports = $this->reportRepo->search();
+        return view('management.report.index', ['reports' => $reports]);
+    }
+
+    public function create() {
+        $accounts = $this->accountRepo->getAll();
+        return view('management.report.create', ['accounts' => $accounts]);
+    }
+
+    public function store(CreateRequest $createRequest) {
+        try {
+            DB::beginTransaction();
+            $data = request()->all();
+            $this->reportRepo->create($data);
+            DB::commit();
+            session()->flash('success', __('messages.reportCreated'));
+        } catch (\Exception $e) {
+            Log::error('Report Create Error ', ['admin_id' => Auth::guard('admin')->id(), 'error' => $e->getMessage()]);
+            DB::rollBack();
+            session()->flash('error', __('messages.createFail'));
+        }
+
+        return redirect()->route('management.report');
+    }
+
+    public function edit($id) {
+        try {
+            $accounts = $this->accountRepo->getAll();
+            $report = $this->reportRepo->find($id);
+            session()->put('customer_data', $report);
+        } catch (\Exception $e) {
+            session()->flash('error', __('messages.customerNotFound'));
+            return redirect()->route('management.customer');
+        }
+        return view('management.report.edit', ['report' => $report, 'accounts' => $accounts]);
+    }
+
+    public function import(){
+        return view('management.report.import');
+    }
+
+    public function saveImport(ExportRequest $request){
+        try {
+            $date = request('date') ? request('date') : Carbon::now()->format('Y-m-d');
+            $rates = Currency::all()->pluck('rate', 'code')->toArray();
+            CustomerReport::where('date', $date)->update(['totalLive' => 0, 'totalDie' => 0]);
+            Account::query()->update(['status' => '1']);
+            $excel = Excel::import(new ReportsImport($date, $request->get('isCalculate'), $rates), request()->file('reportImport'));
+            session()->flash('success', "Import successed");
+            return redirect()->route('management.report');
+        } catch (\Exception $e) {
+            dd($e);
+        }
+    }
+}

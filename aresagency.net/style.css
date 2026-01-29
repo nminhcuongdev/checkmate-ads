@@ -1,0 +1,143 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  color: #ffff;
+}
+
+body {
+  background: #0e0f11;
+  font-family: "Unbounded";
+}
+
+input:focus-visible{
+  outline: none !important;
+}
+
+.garantpro {
+  font-family: "Garantpro" !important;
+}
+
+.no-scroll {
+  overflow: hidden;
+  height: 100vh; 
+}
+
+@font-face {
+  font-family: "Garantpro";
+  src: local("Garantpro"), url(./assets/garantpro-regular.otf) format("opentype");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Garantpro";
+  src: local("Garantpro"), url(./assets/garantpro-bold.otf) format("opentype");
+  font-weight: 700;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FFFFFF0D;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FFFFFF0D;
+}
+
+
+.transform-ones {
+  transition: opacity 1.1s ease-out, transform 1.1s ease-out !important;
+}
+
+.transform-twos {
+  transition: opacity 1.2s ease-out, transform 1.2s ease-out !important;
+}
+
+.transform-threes {
+  transition: opacity 1.3s ease-out, transform 1.3s ease-out !important;
+}
+
+.transform-fours {
+  transition: opacity 1.4s ease-out, transform 1.4s ease-out !important;
+}
+
+.typing-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cursor {
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+
+.animated-left-to-right {
+  position: relative;
+  opacity: 0; 
+  transform: translateX(-200px);
+  transition: transform 1s ease-out, opacity 1s ease-out;
+}
+
+.animated-left-to-right.show {
+  opacity: 1;
+  transform: translateX(0); 
+}
+
+.animated-right-to-left {
+  opacity: 0; 
+  transform: translateX(100px);
+  transition: transform 1s ease-out, opacity 1s ease-out;
+}
+
+.animated-right-to-left.show {
+  opacity: 1;
+  transform: translateX(0); 
+}
+
+.animated-top-to-bottom {
+  opacity: 0;
+  transform: translateY(-100px);
+  transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+.animated-top-to-bottom.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.animated-bottom-to-top {
+  opacity: 0;
+  transform: translateY(100px);
+  transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+.animated-bottom-to-top.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.animated-hidden-to-show {
+  opacity: 0;
+  transform: translateY(50);
+  transition: opacity 1s ease-out, transform 2s ease-out;
+}
+
+.animated-hidden-to-show.show {
+  opacity: 1;
+  transform: translateY(0);
+}
